@@ -5,6 +5,7 @@ import cors from "cors";
 import express from "express";
 import { PostgresDataSource } from "./database/db.js";
 import router from "./routes/index.js";
+import connect from "./rabbitmq/connect.js";
 
 async function main() {
   try {
@@ -17,6 +18,8 @@ async function main() {
     app.use(express.json());
 
     app.use(router);
+
+    connect();
 
     app.listen(port, () => {
       console.log(`Server is running at http://localhost:${port}`);
