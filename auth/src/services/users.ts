@@ -1,5 +1,5 @@
 import { userRepository } from "../database/repositories/repositories.js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 const usersService = {
   get: async (idOrEmail: string) => {

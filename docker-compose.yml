@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  # RabbitMQ service
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: rabbitmq
+    hostname: rabbitmq
+    ports:
+      - "5672:5672" # Port for AMQP
+      - "15672:15672" # Port for RabbitMQ management
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  # Auth service
+  auth:
+    build:
+      context: ./auth # Path to your auth service directory
+      dockerfile: Dockerfile
+    container_name: auth
+    restart: always
+    ports:
+      - "3000:3000" # Expose auth service on port 3001
+    depends_on:
+      - rabbitmq
+    environment:
+      - PG_HOST=host.docker.internal
+      - PG_PORT=5432
+      - PG_USER=postgres
+      - PG_DB=itmo_backend
+      - PG_PASSWORD=postgres
+      - JWT_SECRET=123456
+      - AMQP=amqp://rabbitmq:5672
+
+  # Server service
+  server:
+    build:
+      context: ./server # Path to your server service directory
+      dockerfile: Dockerfile
+    container_name: server
+    restart: always
+    ports:
+      - "3001:3001" # Expose server service on port 3000
+    depends_on:
+      - rabbitmq
+    environment:
+      - PG_HOST=host.docker.internal
+      - PG_PORT=5432
+      - PG_USER=postgres
+      - PG_DB=itmo_backend
+      - PG_PASSWORD=postgres
+      - JWT_SECRET=123456
+      - AMQP=amqp://rabbitmq:5672

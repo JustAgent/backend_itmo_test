@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "NODE_ENV=production npx typeorm-ts-node-esm migration:run -d src/database/db.ts && tsx src/index.ts",
+    "start": "NODE_ENV=production node dist/index.js",
     "build": "tsc -p . && cp package.json ./dist/package.json && cp .env ./dist/.env",
     "dev": "NODE_ENV=development nodemon --exec tsx src/index.ts",
     "tsc": "tsc -p tsconfig.json",
@@ -24,7 +24,7 @@
     "@types/cors": "^2.8.17",
     "@types/jsonwebtoken": "^9.0.6",
     "amqplib": "^0.10.4",
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.18.3",

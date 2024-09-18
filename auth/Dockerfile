@@ -2,11 +2,12 @@ FROM node:21-alpine
 
 WORKDIR /app
 
-COPY ./package.json ./yarn.lock ./
-RUN yarn --frozen-lockfile
+COPY ./package.json ./
 
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
 COPY . .
-CMD ["yarn", "start"]
+RUN npm install
+RUN npm run build
+CMD ["npm", "start"]

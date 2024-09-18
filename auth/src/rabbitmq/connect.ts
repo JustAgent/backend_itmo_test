@@ -5,14 +5,30 @@ import { listen } from "./auth.js";
 export let connection: amqplib.Connection;
 export let channel: amqplib.Channel;
 export const requestQueue = "auth-req";
-export default async function connect() {
-  try {
-    console.log("RabbitMQ connected: auth");
-    connection = await amqplib.connect(process.env.AMQP);
-    channel = await connection.createChannel();
-    await channel.assertQueue(requestQueue);
-    listen();
-  } catch (error) {
-    console.log(error);
+
+const RECONNECT_INTERVAL = 2000; // 5 seconds
+const MAX_RECONNECT_TIME = 10 * 60 * 1000; // 10 minutes in milliseconds
+
+async function reconnect() {
+  let startTime = Date.now();
+
+  while (Date.now() - startTime < MAX_RECONNECT_TIME) {
+    try {
+      console.log("Attempting to connect to RabbitMQ...");
+      connection = await amqplib.connect(process.env.AMQP);
+      channel = await connection.createChannel();
+      await channel.assertQueue(requestQueue);
+      listen();
+      console.log("RabbitMQ connected: server");
+      return; // Exit loop if connection is successful
+    } catch (error) {
+      console.log("Connection failed. Retrying in 5 seconds...");
+      console.error(error);
+      await new Promise((resolve) => setTimeout(resolve, RECONNECT_INTERVAL));
+    }
   }
+
+  console.log("Failed to connect to RabbitMQ after 10 minutes. Exiting...");
 }
+
+export default reconnect;
