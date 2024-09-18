@@ -7,7 +7,7 @@ const bookService = {
   },
 
   list: async () => {
-    return await bookRepository.find({ relations: ["owner"] });
+    return await bookRepository.find();
   },
 };
 
