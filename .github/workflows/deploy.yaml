@@ -36,10 +36,14 @@ jobs:
           chmod 600 "$HOME/.ssh/key"
           ssh-keyscan ${{ secrets.VPS_SERVER_NAME }} >> "$HOME/.ssh/known_hosts"
 
+      - name: Create target directory on server
+        run: |
+          ssh -i $HOME/.ssh/key -o StrictHostKeyChecking=no $VPS_USER_NAME@$VPS_SERVER_NAME 'mkdir -p /root/itmo_backend'
+
       - name: Deploy via Rsync
         run: |
-          rsync -e "ssh -i $HOME/.ssh/key -o StrictHostKeyChecking=no" --archive --compress --delete . $VPS_USER_NAME@$VPS_SERVER_NAME:/var/www/apps/github/backend_itmo_test
+          rsync -e "ssh -i $HOME/.ssh/key -o StrictHostKeyChecking=no" --archive --compress --delete . $VPS_USER_NAME@$VPS_SERVER_NAME:/root/itmo_backend
 
       - name: Build and Deploy on Server
         run: |
-          ssh -i $HOME/.ssh/key -o StrictHostKeyChecking=no $VPS_USER_NAME@$VPS_SERVER_NAME 'cd /var/www/apps/github/backend_itmo_test && docker compose up -d --build'
+          ssh -i $HOME/.ssh/key -o StrictHostKeyChecking=no $VPS_USER_NAME@$VPS_SERVER_NAME 'cd /root/itmo_backend && docker compose up -d --build'
