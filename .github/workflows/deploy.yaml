@@ -9,8 +9,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      VPS_USER_NAME: ${{ secrets.VPS_DEV_USER_NAME }}
-      VPS_SERVER_NAME: ${{ secrets.VPS_DEV_SERVER_NAME }}
+      VPS_USER_NAME: ${{ secrets.VPS_USER_NAME }}
+      VPS_SERVER_NAME: ${{ secrets.VPS_SERVER_NAME }}
 
     steps:
       - uses: actions/checkout@v2
