@@ -11,21 +11,30 @@ jobs:
     env:
       VPS_USER_NAME: ${{ secrets.VPS_DEV_USER_NAME }}
       VPS_SERVER_NAME: ${{ secrets.VPS_DEV_SERVER_NAME }}
+
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+
+      - uses: actions/setup-node@v3
         with:
-          node-version: 12.x
-      - name: Setup
+          node-version: "12.x"
+
+      - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install rsync -y
-          mkdir "$HOME/.ssh"
-          echo "${{ secrets.vps_private_key }}" > "$HOME/.ssh/key"
+          sudo apt-get install rsync openssh-client -y
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p "$HOME/.ssh"
+          echo "${{ secrets.VPS_PRIVATE_KEY }}" > "$HOME/.ssh/key"
           chmod 600 "$HOME/.ssh/key"
-      - name: Delivery
+          ssh-keyscan ${{ secrets.VPS_SERVER_NAME }} >> "$HOME/.ssh/known_hosts"
+
+      - name: Deploy via Rsync
         run: |
-          rsync -e "ssh -i $HOME/.ssh/key -o StrictHostKeyChecking=no" --archive --compress --delete . $VPS_USER_NAME@$VPS_SERVER_NAME:/var/www/apps/github/manual-node-deploy
-      - name: Building on server
+          rsync -e "ssh -i $HOME/.ssh/key -o StrictHostKeyChecking=no" --archive --compress --delete . $VPS_USER_NAME@$VPS_SERVER_NAME:/var/www/apps/github/backend_itmo_test
+
+      - name: Build and Deploy on Server
         run: |
-          ssh -i $HOME/.ssh/key $VPS_USER_NAME@$VPS_SERVER_NAME 'cd /var/www/apps/github/manual-node-deploy && docker compose up -d --build'
+          ssh -i $HOME/.ssh/key -o StrictHostKeyChecking=no $VPS_USER_NAME@$VPS_SERVER_NAME 'cd /var/www/apps/github/backend_itmo_test && docker compose up -d --build'
