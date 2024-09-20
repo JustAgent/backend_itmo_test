@@ -29,7 +29,7 @@ services:
       - PG_PORT=5432
       - PG_USER=postgres
       - PG_DB=itmo_backend
-      - PG_PASSWORD=postgres
+      - PG_PASSWORD=sDfk1Zfkr41
       - JWT_SECRET=123456
       - AMQP=amqp://rabbitmq:5672
 
@@ -49,6 +49,6 @@ services:
       - PG_PORT=5432
       - PG_USER=postgres
       - PG_DB=itmo_backend
-      - PG_PASSWORD=postgres
+      - PG_PASSWORD=sDfk1Zfkr41
       - JWT_SECRET=123456
       - AMQP=amqp://rabbitmq:5672
