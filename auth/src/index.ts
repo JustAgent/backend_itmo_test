@@ -9,7 +9,7 @@ import connect from "./rabbitmq/connect.js";
 
 async function main() {
   try {
-    console.log("Auth service started");
+    console.log("Auth service started finally");
     await PostgresDataSource.initialize();
     const app = express();
     const port = process.env.PORT || 3000;
