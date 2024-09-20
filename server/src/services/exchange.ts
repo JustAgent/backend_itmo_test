@@ -19,7 +19,7 @@ const exchangeService = {
   fulfillRequest: async (requestId: number, currentUserId: number) => {
     const exchangeRequest = await exchangeRequestRepository.findOne({
       where: { id: requestId },
-      relations: ["requestedBook", "requestedBook.owner", "offeredBook", "offeredBook.owner", "creator"],
+      relations: ["requestedBook", "offeredBook"],
     });
 
     if (!exchangeRequest) {
