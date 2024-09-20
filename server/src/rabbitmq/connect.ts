@@ -7,7 +7,7 @@ export const requestQueue = "auth-req";
 
 const RECONNECT_INTERVAL = 2000; // 5 seconds
 const MAX_RECONNECT_TIME = 10 * 60 * 1000; // 10 minutes in milliseconds
-
+//
 async function reconnect() {
   let startTime = Date.now();
 
