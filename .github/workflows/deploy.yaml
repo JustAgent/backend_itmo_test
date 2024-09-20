@@ -19,6 +19,11 @@ jobs:
         with:
           node-version: "12.x"
 
+      - name: Check environment variables
+        run: |
+          echo "VPS_USER_NAME=$VPS_USER_NAME"
+          echo "VPS_SERVER_NAME=$VPS_SERVER_NAME"
+
       - name: Install dependencies
         run: |
           sudo apt-get update
