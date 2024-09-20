@@ -25,7 +25,7 @@ services:
     depends_on:
       - rabbitmq
     environment:
-      - PG_HOST=host.docker.internal
+      - PG_HOST=5.61.57.200
       - PG_PORT=5432
       - PG_USER=postgres
       - PG_DB=itmo_backend
@@ -45,7 +45,7 @@ services:
     depends_on:
       - rabbitmq
     environment:
-      - PG_HOST=host.docker.internal
+      - PG_HOST=5.61.57.200
       - PG_PORT=5432
       - PG_USER=postgres
       - PG_DB=itmo_backend
