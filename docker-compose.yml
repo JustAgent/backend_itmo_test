@@ -7,8 +7,8 @@ services:
     container_name: rabbitmq
     hostname: rabbitmq
     ports:
-      - "5672:5672" # Port for AMQP
-      - "15672:15672" # Port for RabbitMQ management
+      - "5672:5672"
+      - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
@@ -16,12 +16,12 @@ services:
   # Auth service
   auth:
     build:
-      context: ./auth # Path to your auth service directory
+      context: ./auth
       dockerfile: Dockerfile
     container_name: auth
     restart: always
     ports:
-      - "3000:3000" # Expose auth service on port 3001
+      - "3000:3000"
     depends_on:
       - rabbitmq
     environment:
@@ -36,12 +36,12 @@ services:
   # Server service
   server:
     build:
-      context: ./server # Path to your server service directory
+      context: ./server
       dockerfile: Dockerfile
     container_name: server
     restart: always
     ports:
-      - "3001:3001" # Expose server service on port 3000
+      - "3001:3001"
     depends_on:
       - rabbitmq
     environment:
